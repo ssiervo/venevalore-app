@@ -1715,7 +1715,7 @@ const css = `
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap');
 :root { --bg:#F8F9FB; --card:#FFF; --text:#0D1117; --muted:#6B7280; --border:#E5E7EB; --accent:#0066FF; --grid:#F0F0F0; }
 .dark { --bg:#0D1117; --card:#161B22; --text:#F0F6FC; --muted:#8B949E; --border:#30363D; --accent:#58A6FF; --grid:#21262D; }
-* { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
+* { box-sizing:border-box; transition:background-color 0.4s ease, color 0.3s ease, border-color 0.3s ease; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
 body { margin:0; background:var(--bg); -webkit-user-select:none; user-select:none; }
 .shell { padding-top:env(safe-area-inset-top,0px); }
 input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button { -webkit-appearance:none; margin:0; }
