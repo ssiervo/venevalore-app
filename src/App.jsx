@@ -1259,6 +1259,8 @@ function FeaturesTab() {
       { n:"Línea BASE de referencia", d:"Línea punteada horizontal al precio de apertura del período. Muestra visualmente si el activo está por encima o debajo del punto de partida." },
       { n:"Tooltips edge-aware", d:"Tooltip SVG (foreignObject) detecta bordes del gráfico y se voltea izquierda/derecha y arriba/abajo para nunca cortarse." },
       { n:"Sparklines en lista", d:"Mini gráficos SVG de 58×26px en cada tarjeta de acción con línea BASE de referencia punteada." },
+      { n:"Touch scrubbing (drag-to-explore)", d:"Arrastra el dedo por cualquier gráfico para explorar los datos en tiempo real. El tooltip sigue tu dedo sin necesidad de tap. preventDefault() bloquea el scroll durante el gesto para una experiencia fluida." },
+      { n:"Haptic feedback (vibración)", d:"3 niveles de vibración: 8ms al tocar el gráfico, 4ms al cruzar cada punto de datos mientras arrastras, 6ms al soltar. Usa navigator.vibrate() en Android." },
     ]},
     { title:"🔍 Búsqueda Fuzzy con NLP", items:[
       { n:"Stripping de acentos (NFD)", d:"Normalización Unicode NFD + remoción de marcas combinantes. 'ceramica' encuentra 'Cerámica Carabobo' sin problemas." },
@@ -1286,7 +1288,7 @@ function FeaturesTab() {
       { n:"Intraday pinned al daily %", d:"Open = precio ÷ (1 + dailyChg/100). Garantiza que open→close produce el % diario verificado exacto." },
     ]},
     { title:"⚡ Performance & UX", items:[
-      { n:"Single-file architecture", d:"1.699 líneas de JSX, cero npm dependencies más allá de React core. Sin build complejo, sin tree-shaking issues." },
+      { n:"Single-file architecture", d:"1728 líneas de JSX, cero npm dependencies más allá de React core. Sin build complejo, sin tree-shaking issues." },
       { n:"useMemo / useCallback", d:"Listas filtradas, conversiones FX y datos de chart memoizados. doRefresh con useCallback para referencia estable en useEffect." },
       { n:"Tab fade animation", d:"fadeIn 0.25s ease-out con 6px translateY en cada cambio de tab. fadeKey se incrementa para forzar re-mount." },
       { n:"user-select: none", d:"Previene selección de texto durante gestos de drag en móvil." },
