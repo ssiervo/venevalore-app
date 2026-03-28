@@ -766,6 +766,7 @@ function FXTab() {
           { l:"Brecha Par$/BCV$", r:"45,3%", f:"📊", desc:"Cuesta 45,3% más comprar dólares en el paralelo vs tasa oficial" },
           { l:"Brecha Par€/BCV€", r:"44,3%", f:"📊", desc:"678 × 1,15 = 780 Bs/€ vs BCV 540,17 Bs/€" },
           { l:"€ Paralelo implícito", r:"780 Bs/€", f:"💶", desc:"Costo real de euros vía paralelo: 678 × 1.15 EUR/USD" },
+          { l:"€ Paralelo implícito", r:"780 Bs/€", f:"💶", desc:"Costo real de euros vía paralelo: 678 × 1.15 EUR/USD" },
           { l:"1 USD → EUR", r:"€0,87", f:"💱", desc:"Tipo de cambio internacional (fuente: FRED, Mar 2026)" },
         ].map((r, i) => (
           <div key={i} style={{ padding:"7px 0", borderBottom:i<3?"1px solid var(--border)":"none" }}>
