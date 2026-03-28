@@ -1519,7 +1519,7 @@ export default function App() {
   if (sel) return (
     <div className={isDark?"dark":""} style={rootSt}>
       <style>{css}</style>
-      <div ref={scrollRef} style={shellSt}>
+      <div ref={scrollRef} className="shell" style={shellSt}>
         <div style={{ transform:"translateY(" + (refreshing ? 50 : pullDist * 0.6) + "px)", transition: pullDist === 0 || refreshing ? "transform 0.5s cubic-bezier(0.34,1.56,0.64,1)" : "none", willChange:"transform" }}>
           {sticky ? <div style={{ position:"sticky", top:0, zIndex:50, background:"var(--bg)", paddingBottom:2 }}><CurBar /></div> : <CurBar />}
           <StockDetail stock={sel} cur={cur} onBack={() => { setSel(null); if(scrollRef.current) scrollRef.current.scrollTop = 0; }} />
@@ -1545,7 +1545,7 @@ export default function App() {
   return (
     <div className={isDark?"dark":""} style={rootSt}>
       <style>{css}</style>
-      <div ref={scrollRef} style={shellSt}>
+      <div ref={scrollRef} className="shell" style={shellSt}>
         {/* Pull indicator - absolute positioned */}
         <div style={{ position:"absolute", top:0, left:0, right:0, textAlign:"center", pointerEvents:"none",
           transform:"translateY(" + (refreshing ? 10 : Math.max(-40, pullDist * 0.6 - 40)) + "px)",
@@ -1717,6 +1717,7 @@ const css = `
 .dark { --bg:#0D1117; --card:#161B22; --text:#F0F6FC; --muted:#8B949E; --border:#30363D; --accent:#58A6FF; --grid:#21262D; }
 * { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
 body { margin:0; background:var(--bg); -webkit-user-select:none; user-select:none; }
+.shell { padding-top:env(safe-area-inset-top,0px); }
 input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button { -webkit-appearance:none; margin:0; }
 input[type=number] { -moz-appearance:textfield; }
 ::-webkit-scrollbar { width:0; height:0; }
