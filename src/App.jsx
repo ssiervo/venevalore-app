@@ -1477,7 +1477,7 @@ export default function App() {
   const CurBar = () => {
     const colors = { VES:"#EAB308", USD_BCV:"#00C853", EUR_BCV:"#3B82F6", USD_PAR:"#F59E0B" };
     return (
-    <div style={{ display:"flex", gap:4, padding:"6px 0", overflowX:"auto", flexShrink:0 }}>
+    <div style={{ display:"flex", gap:3, padding:"6px 0", overflowX:"auto", flexWrap:"nowrap", flexShrink:0 }}>
       {Object.entries(FX).filter(([k]) => k !== "USD").map(([k, v]) => {
         const a = cur === k, isPar = k === "USD_PAR", c = colors[k];
         const lbl = k === "VES" ? "VES" : k === "USD_BCV" ? "$ BCV" : k === "EUR_BCV" ? "€ BCV" : "$ Paralelo";
@@ -1697,12 +1697,12 @@ export default function App() {
         </div>{/* close transform wrapper */}
 
         {/* Bottom tabs */}
-        <div style={{ position:"fixed", bottom:0, left:0, right:0, background:"var(--card)", borderTop:"1px solid var(--border)", display:"flex", justifyContent:"space-around", padding:"6px 0 env(safe-area-inset-bottom,8px)", zIndex:100, backdropFilter:"blur(12px)" }}>
+        <div style={{ position:"fixed", bottom:0, left:0, right:0, background:"var(--card)", borderTop:"1px solid var(--border)", display:"flex", justifyContent:"space-around", padding:"4px 0 env(safe-area-inset-bottom,8px)", zIndex:100, backdropFilter:"blur(12px)" }}>
           {[{ k:"market", i:"📊", l:"Mercado" }, { k:"watchlist", i:"⭐", l:"Watchlist" }, { k:"fx", i:"💱", l:"FX" }, { k:"commodities", i:"🛢️", l:"Commodities" }, { k:"datos", i:"📋", l:"Datos" }, { k:"sources", i:"📚", l:"Fuentes" }, { k:"features", i:"🚀", l:"Features" }, { k:"about", i:"ℹ️", l:"Info" }].map(t => (
             <button key={t.k} onClick={() => switchTab(t.k)}
-              style={{ background:"none", border:"none", display:"flex", flexDirection:"column", alignItems:"center", gap:2, cursor:"pointer", padding:"4px 8px", color:tab === t.k ? "var(--accent)" : "var(--muted)" }}>
-              <span style={{ fontSize:16 }}>{t.i}</span>
-              <span style={{ fontSize:9, fontWeight:600, fontFamily:S.f }}>{t.l}</span>
+              style={{ background:"none", border:"none", display:"flex", flexDirection:"column", alignItems:"center", gap:2, cursor:"pointer", padding:"2px 4px", color:tab === t.k ? "var(--accent)" : "var(--muted)" }}>
+              <span style={{ fontSize:14 }}>{t.i}</span>
+              <span style={{ fontSize:7.5, fontWeight:600, fontFamily:S.f }}>{t.l}</span>
             </button>
           ))}
         </div>
