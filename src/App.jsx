@@ -1525,7 +1525,7 @@ export default function App() {
           <StockDetail stock={sel} cur={cur} onBack={() => { setSel(null); if(scrollRef.current) scrollRef.current.scrollTop = 0; }} />
         </div>
         {/* Pull indicator - fixed at top */}
-        <div style={{ position:"absolute", top:0, left:0, right:0, textAlign:"center", pointerEvents:"none",
+        <div style={{ position:"absolute", top:48, left:0, right:0, textAlign:"center", pointerEvents:"none",
           transform:"translateY(" + (refreshing ? 10 : Math.max(-40, pullDist * 0.6 - 40)) + "px)",
           transition: pullDist === 0 || refreshing ? "transform 0.5s cubic-bezier(0.34,1.56,0.64,1)" : "none",
           opacity: refreshing ? 1 : Math.min(1, pullDist / 30), zIndex:200,
@@ -1547,7 +1547,7 @@ export default function App() {
       <style>{css}</style>
       <div ref={scrollRef} className="shell" style={shellSt}>
         {/* Pull indicator - absolute positioned */}
-        <div style={{ position:"absolute", top:0, left:0, right:0, textAlign:"center", pointerEvents:"none",
+        <div style={{ position:"absolute", top:48, left:0, right:0, textAlign:"center", pointerEvents:"none",
           transform:"translateY(" + (refreshing ? 10 : Math.max(-40, pullDist * 0.6 - 40)) + "px)",
           transition: pullDist === 0 || refreshing ? "transform 0.5s cubic-bezier(0.34,1.56,0.64,1)" : "none",
           opacity: refreshing ? 1 : Math.min(1, pullDist / 30), zIndex:200,
