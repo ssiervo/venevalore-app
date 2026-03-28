@@ -1336,11 +1336,11 @@ function AboutTab() {
   const S = { f: "'DM Sans',sans-serif" };
   return (
     <div style={{ paddingBottom:80 }}>
-      <div style={{ fontSize:22, fontWeight:700, color:"var(--text)", fontFamily:S.f, marginBottom:16, textAlign:"center" }}>Acerca de Venevalore$</div>
+      <div style={{ fontSize:22, fontWeight:700, color:"var(--text)", fontFamily:S.f, marginBottom:16, textAlign:"center" }}>Acerca de Venevalores</div>
       <div style={{ background:"var(--card)", borderRadius:16, padding:20, border:"1px solid var(--border)", marginBottom:16 }}>
         <div style={{ fontSize:14, fontWeight:700, color:"var(--text)", fontFamily:S.f, marginBottom:10 }}>🎯 ¿Qué es esto?</div>
         <div style={{ fontSize:12, color:"var(--muted)", fontFamily:S.f, lineHeight:1.7 }}>
-          Venevalore$ es un <strong style={{ color:"var(--text)" }}>proof of concept</strong> — una prueba de concepto de un visualizador de renta variable de la Bolsa de Valores de Caracas (BVC) con conversión a divisas en tiempo real. Fue construido enteramente como proyecto personal, por diversión y como ejercicio de ingeniería financiera.
+          Venevalores es un <strong style={{ color:"var(--text)" }}>proof of concept</strong> — una prueba de concepto de un visualizador de renta variable de la Bolsa de Valores de Caracas (BVC) con conversión a divisas en tiempo real. Fue construido enteramente como proyecto personal, por diversión y como ejercicio de ingeniería financiera.
         </div>
       </div>
       <div style={{ background:"var(--card)", borderRadius:16, padding:20, border:"1px solid var(--border)", marginBottom:16 }}>
@@ -1374,7 +1374,7 @@ function AboutTab() {
       </div>
       <div style={{ textAlign:"center", padding:"20px 0" }}>
         <div style={{ fontSize:14, color:"var(--muted)", fontFamily:S.f }}>Hecho con ☕ y curiosidad por <strong style={{ color:"var(--text)" }}>Sebastian Siervo</strong></div>
-        <div style={{ fontSize:11, color:"var(--muted)", fontFamily:S.f, marginTop:4 }}>Venevalore$ © 2026</div>
+        <div style={{ fontSize:11, color:"var(--muted)", fontFamily:S.f, marginTop:4 }}>Venevalores © 2026</div>
       </div>
     </div>
   );
@@ -1565,7 +1565,7 @@ export default function App() {
         {/* Header */}
         <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", padding:"12px 0 4px" }}>
           <div>
-            <div style={{ fontSize:20, fontWeight:800, color:"var(--text)", fontFamily:S.f }}>Venevalore$</div>
+            <div style={{ fontSize:20, fontWeight:800, color:"var(--text)", fontFamily:S.f }}>Venevalores</div>
             <div style={{ fontSize:11, color:"var(--muted)", fontFamily:S.f }}>BVC: Renta Variable FX Visualizer</div>
           </div>
           <div style={{ fontSize:10, color:"var(--muted)", fontFamily:S.f, textAlign:"right" }}>
