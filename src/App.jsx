@@ -34,6 +34,8 @@ function fmtP(v, c) {
   return s + v.toFixed(6);
 }
 function fmtPct(v) { return (v >= 0 ? "+" : "") + v.toFixed(2) + "%"; }
+const _haptic = ms => { try { navigator.vibrate && navigator.vibrate(ms); } catch(e) {} };
+const _cx = e => (e.touches?.[0] || e.changedTouches?.[0] || e).clientX;
 const MO = ["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"];
 function fmtDate(ts) { const d = new Date(ts); return d.getDate() + " " + MO[d.getMonth()] + " " + d.getFullYear(); }
 function fmtTime(ts) { const d = new Date(ts); const h = d.getHours(); return (h % 12 || 12) + ":" + String(d.getMinutes()).padStart(2,"0") + (h >= 12 ? " PM" : " AM"); }
@@ -309,20 +311,34 @@ function Chart({ data, cur, type = "line", height = 260, onHover, is1D = false, 
   const up = last >= first, col = up ? "#00C853" : "#FF1744";
   const gid = "g" + hashStr(cur + type + data.length);
 
-  const onMouse = useCallback(e => {
+  const onInteract = useCallback(e => {
     if (!ref.current) return;
+    if (e.touches && e.cancelable) e.preventDefault();
     const rc = ref.current.getBoundingClientRect();
     if (rc.width <= 0) return;
-    const vbX = (e.clientX - rc.left) * (VBW / rc.width);
+    const vbX = (_cx(e) - rc.left) * (VBW / rc.width);
     const ratio = Math.max(0, Math.min(1, (vbX - pad.l) / W));
     const idx = Math.round(ratio * (conv.length - 1));
     if (idx >= 0 && idx < conv.length) {
-      setTip({ x: xS(idx), y: yS(conv[idx].close), d: conv[idx] });
+      const prev = tip;
+      const newTip = { x: xS(idx), y: yS(conv[idx].close), d: conv[idx], idx };
+      setTip(newTip);
       if (onHover) onHover(data[idx]);
+      if (!prev || prev.idx !== idx) _haptic(4);
     }
-  }, [conv, data, W, onHover]);
+  }, [conv, data, W, onHover, tip]);
 
-  const onLeave = () => { setTip(null); if (onHover) onHover(null); };
+  const onTouchStart = useCallback(e => {
+    if (e.cancelable) e.preventDefault();
+    _haptic(8);
+    onInteract(e);
+  }, [onInteract]);
+
+  const onLeave = useCallback(() => {
+    if (tip) _haptic(6);
+    setTip(null);
+    if (onHover) onHover(null);
+  }, [onHover, tip]);
 
   const yTk = Array.from({ length: 5 }, (_, i) => {
     const v = yMn + (i / 4) * (yMx - yMn);
@@ -372,7 +388,7 @@ function Chart({ data, cur, type = "line", height = 260, onHover, is1D = false, 
     const cw = Math.max(1.5, (W / conv.length) * 0.55);
     return (
       <svg ref={ref} width="100%" viewBox={"0 0 " + VBW + " " + vH} style={{ display:"block" }}
-        onMouseMove={onMouse} onMouseLeave={onLeave} onTouchMove={onMouse} onTouchEnd={onLeave}>
+        onMouseMove={onInteract} onMouseLeave={onLeave} onTouchStart={onTouchStart} onTouchMove={onInteract} onTouchEnd={onLeave}>
         {gridEls}
         {refLine}
         {conv.map((d, i) => {
@@ -394,7 +410,7 @@ function Chart({ data, cur, type = "line", height = 260, onHover, is1D = false, 
   const ap = lp + " L" + xS(conv.length - 1) + "," + (pad.t + H) + " L" + xS(0) + "," + (pad.t + H) + " Z";
   return (
     <svg ref={ref} width="100%" viewBox={"0 0 " + VBW + " " + vH} style={{ display:"block" }}
-      onMouseMove={onMouse} onMouseLeave={onLeave} onTouchMove={onMouse} onTouchEnd={onLeave}>
+      onMouseMove={onInteract} onMouseLeave={onLeave} onTouchStart={onTouchStart} onTouchMove={onInteract} onTouchEnd={onLeave}>
       <defs>
         <linearGradient id={gid} x1="0" y1="0" x2="0" y2="1">
           <stop offset="0%" stopColor={col} stopOpacity={0.16} />
@@ -438,21 +454,26 @@ function IBCChart({ cur, tf, onStats }) {
   const path = vals.map((v, i) => (i === 0 ? "M" : "L") + xS(i) + "," + yS(v)).join(" ");
   const is1D = tf === "1D";
 
-  const onMouse = e => {
+  const [lastIdx, setLastIdx] = useState(null);
+  const onInteract = e => {
     if (!ref.current) return;
+    if (e.touches && e.cancelable) e.preventDefault();
     const rc = ref.current.getBoundingClientRect();
     if (rc.width <= 0) return;
-    const vbX = (e.clientX - rc.left) * (VW / rc.width);
+    const vbX = (_cx(e) - rc.left) * (VW / rc.width);
     const ratio = Math.max(0, Math.min(1, (vbX - pad.l) / W));
     const idx = Math.round(ratio * (conv.length - 1));
     if (idx >= 0 && idx < conv.length) {
       const v = conv[idx].v, f = conv[0].v;
       setTip({ x: xS(idx), y: yS(v), v, date: conv[idx].date });
       if (onStats) onStats({ value: v, pct: f ? ((v - f) / f) * 100 : 0, date: conv[idx].date, hover: true });
+      if (lastIdx !== idx) { _haptic(4); setLastIdx(idx); }
     }
   };
+  const onTouchStart = e => { if (e.cancelable) e.preventDefault(); _haptic(8); onInteract(e); };
   const onLeave = () => {
-    setTip(null);
+    if (tip) _haptic(6);
+    setTip(null); setLastIdx(null);
     if (onStats && conv.length >= 2) {
       const f = conv[0].v, l = conv[conv.length - 1].v;
       onStats({ value: l, pct: f ? ((l - f) / f) * 100 : 0, date: null, hover: false });
@@ -460,7 +481,7 @@ function IBCChart({ cur, tf, onStats }) {
   };
 
   return (
-    <svg ref={ref} width="100%" viewBox={"0 0 " + VW + " " + VH} style={{ display:"block" }} onMouseMove={onMouse} onMouseLeave={onLeave}>
+    <svg ref={ref} width="100%" viewBox={"0 0 " + VW + " " + VH} style={{ display:"block" }} onMouseMove={onInteract} onMouseLeave={onLeave} onTouchStart={onTouchStart} onTouchMove={onInteract} onTouchEnd={onLeave}>
       <defs>
         <linearGradient id="ibcG" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0%" stopColor={col} stopOpacity={0.14} />
@@ -583,25 +604,28 @@ function FXMini({ data, color = "#FF1744", unit = "Bs" }) {
   const gid = "fm" + hashStr(color + unit);
   const fmtVal = v => v >= 10 ? v.toFixed(0) : v >= 1 ? v.toFixed(1) : v.toFixed(2);
 
-  const onMouse = e => {
+  const onInteract = e => {
     if (!ref.current) return;
+    if (e.touches && e.cancelable) e.preventDefault();
     const rc = ref.current.getBoundingClientRect();
     if (rc.width <= 0) return;
-    const vbX = (e.clientX - rc.left) * (VW / rc.width);
+    const vbX = (_cx(e) - rc.left) * (VW / rc.width);
     const ratio = Math.max(0, Math.min(1, (vbX - pad.l) / W));
     const idx = Math.round(ratio * (data.length - 1));
     if (idx >= 0 && idx < data.length) {
       const d = data[idx];
       const prev = idx > 0 ? data[idx - 1].rate : d.rate;
       const chg = prev ? ((d.rate - prev) / prev) * 100 : 0;
-      setTip({ x: xS(idx), y: yS(d.rate), rate: d.rate, date: d.date, chg });
+      if (!tip || tip.idx !== idx) _haptic(4);
+      setTip({ x: xS(idx), y: yS(d.rate), rate: d.rate, date: d.date, chg, idx });
     }
   };
-  const onLeave = () => setTip(null);
+  const onTouchStart = e => { if (e.cancelable) e.preventDefault(); _haptic(8); onInteract(e); };
+  const onLeave = () => { if (tip) _haptic(6); setTip(null); };
 
   return (
     <svg ref={ref} width="100%" viewBox={"0 0 " + VW + " " + VH} style={{ display:"block", cursor:"crosshair" }}
-      onMouseMove={onMouse} onMouseLeave={onLeave} onTouchMove={onMouse} onTouchEnd={onLeave}>
+      onMouseMove={onInteract} onMouseLeave={onLeave} onTouchStart={onTouchStart} onTouchMove={onInteract} onTouchEnd={onLeave}>
       <defs>
         <linearGradient id={gid} x1="0" y1="0" x2="0" y2="1">
           <stop offset="0%" stopColor={color} stopOpacity={0.12} />
@@ -653,24 +677,27 @@ function DepreciationChart({ data }) {
   const yS = v => pad.t + (1 - (v - (mn - rng * 0.05)) / (rng * 1.1)) * H;
   const path = vals.map((v, i) => (i === 0 ? "M" : "L") + xS(i) + "," + yS(v)).join(" ");
 
-  const onMouse = e => {
+  const onInteract = e => {
     if (!ref.current) return;
+    if (e.touches && e.cancelable) e.preventDefault();
     const rc = ref.current.getBoundingClientRect();
     if (rc.width <= 0) return;
-    const vbX = (e.clientX - rc.left) * (VW / rc.width);
+    const vbX = (_cx(e) - rc.left) * (VW / rc.width);
     const ratio = Math.max(0, Math.min(1, (vbX - pad.l) / W));
     const idx = Math.round(ratio * (data.length - 1));
     if (idx >= 0 && idx < data.length) {
       const v = vals[idx];
       const depr = ((v / vals[0]) - 1) * 100;
-      setTip({ x: xS(idx), y: yS(v), v, date: data[idx].date, rate: data[idx].rate, depr });
+      if (!tip || tip.idx !== idx) _haptic(4);
+      setTip({ x: xS(idx), y: yS(v), v, date: data[idx].date, rate: data[idx].rate, depr, idx });
     }
   };
-  const onLeave = () => setTip(null);
+  const onTouchStart = e => { if (e.cancelable) e.preventDefault(); _haptic(8); onInteract(e); };
+  const onLeave = () => { if (tip) _haptic(6); setTip(null); };
 
   return (
     <svg ref={ref} width="100%" viewBox={"0 0 " + VW + " " + VH} style={{ display:"block", cursor:"crosshair" }}
-      onMouseMove={onMouse} onMouseLeave={onLeave} onTouchMove={onMouse} onTouchEnd={onLeave}>
+      onMouseMove={onInteract} onMouseLeave={onLeave} onTouchStart={onTouchStart} onTouchMove={onInteract} onTouchEnd={onLeave}>
       <defs>
         <linearGradient id="deprG" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0%" stopColor="#FF1744" stopOpacity={0} />
