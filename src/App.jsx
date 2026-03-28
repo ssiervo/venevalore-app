@@ -1726,4 +1726,4 @@ input[type=number] { -moz-appearance:textfield; }
 .tab-fade { animation: fadeIn 0.25s ease-out; }
 `;
 const rootSt = { width:"100%", minHeight:"100vh", background:"var(--bg)", display:"flex", justifyContent:"center", fontFamily:"'DM Sans',sans-serif" };
-const shellSt = { width:"100%", maxWidth:430, height:"100vh", padding:"0 16px", position:"relative", display:"flex", flexDirection:"column", overflowY:"auto", overflowX:"hidden", WebkitOverflowScrolling:"touch" };
+const shellSt = { width:"100%", maxWidth:430, height:"100vh", padding:"48px 16px 0", position:"relative", display:"flex", flexDirection:"column", overflowY:"auto", overflowX:"hidden", WebkitOverflowScrolling:"touch" };
